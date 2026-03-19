@@ -7,7 +7,7 @@ function scrapeJobData() {
     site = 'LinkedIn';
 
     // --- Split-panel view (search, collections, easy-apply) ---
-    const panelTitle = document.querySelector('.job-details-jobs-unified-top-card__job-title h1 a, .job-details-jobs-unified-top-card__job-title a, .job-details-jobs-unified-top-card__job-title h1');
+    const panelTitle = document.querySelector('h1 a[href*="/jobs/view/"], .job-details-jobs-unified-top-card__job-title a, .job-details-jobs-unified-top-card__job-title h1');
     const panelCompany = document.querySelector('.job-details-jobs-unified-top-card__company-name');
     const panelJobId = url.match(/currentJobId=(\d+)/)?.[1];
 
