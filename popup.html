@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catchr</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 17C7 17 9 13 12 13C15 13 17 17 21 17" stroke="#7DD4A8" stroke-width="2" stroke-linecap="round"/>
+        <path d="M3 11C6 11 8 8 11 8" stroke="#7DD4A8" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="17" cy="7" r="3" stroke="#F5C87A" stroke-width="2"/>
+        <path d="M19.5 9.5L22 12" stroke="#F5C87A" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="logo-text">Catchr</span>
+    </div>
+    <span class="site-badge" id="siteBadge">Detecting...</span>
+  </div>
+
+  <div class="body" id="mainView">
+    <div class="field-group">
+      <label class="field-label">Company</label>
+      <input class="field-input" id="company" type="text" placeholder="Company name" />
+    </div>
+    <div class="field-group">
+      <label class="field-label">Position</label>
+      <input class="field-input" id="position" type="text" placeholder="Job title" />
+    </div>
+    <div class="field-group">
+      <label class="field-label">Location</label>
+      <input class="field-input" id="location" type="text" placeholder="Location" />
+    </div>
+    <div class="field-group">
+      <label class="field-label">Link</label>
+      <input class="field-input" id="link" type="text" placeholder="Job URL" />
+    </div>
+
+    <button class="catch-btn" id="catchBtn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+        <path d="M3 17C7 17 9 13 12 13C15 13 17 17 21 17" stroke="#7DD4A8" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="17" cy="7" r="3" stroke="#F5C87A" stroke-width="2.5"/>
+        <path d="M19.5 9.5L22 12" stroke="#F5C87A" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      Catch It
+    </button>
+
+    <p class="meta-line" id="metaLine">Applied → Yes · <span id="todayDate"></span></p>
+  </div>
+
+  <div class="body success-view" id="successView" style="display:none;">
+    <div class="success-icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+        <path d="M5 12L10 17L19 7" stroke="#2C5F4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <p class="success-title">Caught!</p>
+    <p class="success-sub" id="successSub">Logged to your sheet</p>
+    <div class="success-sheet-tag">Job Hunt 2024-26 · Sheet1</div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

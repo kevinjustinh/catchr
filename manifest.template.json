@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Catchr",
+  "version": "1.0",
+  "description": "Catch job listings and log them to your Google Sheet.",
+  "permissions": [
+    "identity",
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.linkedin.com/*",
+    "https://boards.greenhouse.io/*",
+    "https://jobs.lever.co/*",
+    "https://wellfound.com/*",
+    "https://jobs.ashby.com/*",
+    "https://sheets.googleapis.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/Catchr128px.png",
+      "48": "icons/Catchr48px.png",
+      "128": "icons/Catchr128px.png"
+    }
+  },
+  "oauth2": {
+    "client_id": "YOUR_GOOGLE_OAUTH_CLIENT_ID_HERE",
+    "scopes": [
+      "https://www.googleapis.com/auth/spreadsheets"
+    ]
+  }
+}
