@@ -104,8 +104,28 @@ function scrapeJobData() {
   };
 }
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'scrape') {
-    sendResponse(scrapeJobData());
-  }
-});
+function waitForPanel(retries = 10, interval = 300) {
+  return new Promise((resolve) => {
+    const attempt = () => {
+      const data = scrapeJobData();
+      const isPanelView = window.location.href.match(/currentJobId=(\d+)/);
+      if (!isPanelView || data.position || retries <= 0) {
+        resolve(data);
+      } else {
+        retries--;
+        setTimeout(attempt, interval);
+      }
+    };
+    attempt();
+  });
+}
+
+if (!window.__catchrListenerRegistered) {
+  window.__catchrListenerRegistered = true;
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'scrape') {
+      waitForPanel().then(sendResponse);
+      return true;
+    }
+  });
+}
