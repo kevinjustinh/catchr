@@ -19,9 +19,16 @@ function scrapeJobData() {
   const companyIndex = allP.findIndex(t => t === company);
   position = companyIndex >= 0 ? allP[companyIndex + 1] || '' : '';
 
-  // Location is the next p tag after position, trimmed to just location
-  const rawLocation = companyIndex >= 0 ? allP[companyIndex + 2] || '' : '';
-  location = rawLocation.split('·')[0].trim();
+  // Check for LinkedIn "Remote" badge first
+  const remoteSpans = Array.from(document.querySelectorAll('span'))
+    .filter(el => el.innerText.trim() === 'Remote' && el.children.length === 0);
+  if (remoteSpans.length > 0) {
+    location = 'Remote';
+  } else {
+    // Location is the next p tag after position, trimmed to just location
+    const rawLocation = companyIndex >= 0 ? allP[companyIndex + 2] || '' : '';
+    location = rawLocation.split('·')[0].trim();
+  }
 }
 
   // Greenhouse
