@@ -1,35 +1,59 @@
 function scrapeJobData() {
   const url = window.location.href;
-  let company = '', position = '', location = '', site = '';
+  let company = '', position = '', location = '', site = '', link = url;
 
   // LinkedIn
- if (url.includes('linkedin.com')) {
-  site = 'LinkedIn';
+  if (url.includes('linkedin.com')) {
+    site = 'LinkedIn';
 
-  const allP = Array.from(document.querySelectorAll('p'))
-    .map(el => el.innerText.trim())
-    .filter(text => text.length > 1 && text.length < 120);
+    // --- Split-panel view (search, collections, easy-apply) ---
+    const panelTitle = document.querySelector('.job-details-jobs-unified-top-card__job-title h1 a, .job-details-jobs-unified-top-card__job-title a, .job-details-jobs-unified-top-card__job-title h1');
+    const panelCompany = document.querySelector('.job-details-jobs-unified-top-card__company-name');
+    const panelJobId = url.match(/currentJobId=(\d+)/)?.[1];
 
-  // Company is the p tag with aria-label starting with "Company,"
-  const companyEl = document.querySelector('[aria-label^="Company,"]');
-  company = companyEl?.querySelector('a')?.innerText?.trim()
-    || companyEl?.querySelector('p')?.innerText?.trim() || '';
+    if (panelTitle || panelCompany) {
+      position = panelTitle?.innerText?.trim() || '';
+      company = panelCompany?.innerText?.trim() || '';
 
-  // Position is the p tag immediately after company in allP
-  const companyIndex = allP.findIndex(t => t === company);
-  position = companyIndex >= 0 ? allP[companyIndex + 1] || '' : '';
+      // Link: build clean /jobs/view/ URL from currentJobId
+      link = panelJobId
+        ? `https://www.linkedin.com/jobs/view/${panelJobId}/`
+        : url;
 
-  // Check for LinkedIn "Remote" badge first
-  const remoteSpans = Array.from(document.querySelectorAll('span'))
-    .filter(el => el.innerText.trim() === 'Remote' && el.children.length === 0);
-  if (remoteSpans.length > 0) {
-    location = 'Remote';
-  } else {
-    // Location is the next p tag after position, trimmed to just location
-    const rawLocation = companyIndex >= 0 ? allP[companyIndex + 2] || '' : '';
-    location = rawLocation.split('·')[0].trim();
+      // Remote button in panel view
+      const panelRemote = Array.from(document.querySelectorAll('button span.tvm__text'))
+        .find(el => el.innerText.includes('Remote'));
+      if (panelRemote) {
+        location = 'Remote';
+      } else {
+        location = Array.from(document.querySelectorAll('span.tvm__text--low-emphasis'))
+          .map(el => el.innerText.trim())
+          .find(text => text.length > 1 && text !== '·') || '';
+      }
+
+    // --- Full job page view (/jobs/view/) ---
+    } else {
+      const allP = Array.from(document.querySelectorAll('p'))
+        .map(el => el.innerText.trim())
+        .filter(text => text.length > 1 && text.length < 120);
+
+      const companyEl = document.querySelector('[aria-label^="Company,"]');
+      company = companyEl?.querySelector('a')?.innerText?.trim()
+        || companyEl?.querySelector('p')?.innerText?.trim() || '';
+
+      const companyIndex = allP.findIndex(t => t === company);
+      position = companyIndex >= 0 ? allP[companyIndex + 1] || '' : '';
+
+      const remoteSpans = Array.from(document.querySelectorAll('span'))
+        .filter(el => el.innerText.trim() === 'Remote' && el.children.length === 0);
+      if (remoteSpans.length > 0) {
+        location = 'Remote';
+      } else {
+        const rawLocation = companyIndex >= 0 ? allP[companyIndex + 2] || '' : '';
+        location = rawLocation.split('·')[0].trim();
+      }
+    }
   }
-}
 
   // Greenhouse
   else if (url.includes('greenhouse.io')) {
@@ -75,7 +99,7 @@ function scrapeJobData() {
     company: company.trim(),
     position: position.trim(),
     location: location.trim(),
-    link: url,
+    link,
     site
   };
 }

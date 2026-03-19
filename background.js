@@ -45,7 +45,7 @@ async function appendToSheet(data) {
   const token = await getAuthToken();
   const date = getFormattedDate();
   const nextRow = await getNextEmptyRow(token);
-  const range = `${SHEET_TAB}!A${nextRow}:F${nextRow}`;
+  const range = `${SHEET_TAB}!A${nextRow}:I${nextRow}`;
   console.log('Step 3: writing to range', range);
 
   const values = [[
@@ -54,7 +54,10 @@ async function appendToSheet(data) {
     data.position,
     data.link,
     'yes',
-    date
+    date,
+    '', // G
+    '', // H
+    'Unresponsive' // I - Outcome
   ]];
 
   const response = await fetch(
