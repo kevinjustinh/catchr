@@ -17,6 +17,10 @@
     "https://jobs.ashby.com/*",
     "https://sheets.googleapis.com/*"
   ],
+  "icons": {
+    "48": "icons/Catchr48px.png",
+    "128": "icons/Catchr128px.png"
+  },
   "background": {
     "service_worker": "background.js"
   },
